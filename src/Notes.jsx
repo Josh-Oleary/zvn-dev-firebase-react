@@ -1,23 +1,25 @@
 import React from "react";
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, collection, updateDoc, deleteField } from 'firebase/firestore';
 import { db } from './webConfig';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 const Note = ({ data }) => {
-
   const { todo, id } = data;
 
   const onDelete = async (id) => {
-    // const todoDoc = doc(db, 'notes', id.todo);
-    // await deleteDoc(todoDoc);
+      const todoRef = doc(db, 'notes', id)
+
+      await updateDoc(todoRef, {
+        todo: deleteField()
+      })
+      await deleteDoc(doc(db, 'notes', id))
   }
 
   return (
     <View style={styles.note}>
       <Text style={styles.noteText}>{todo}</Text>
-
-      <TouchableOpacity style={styles.noteDelete} onPress={onDelete(id)}>
-        <Text style={styles.noteDeleteText}>X</Text>
+      <TouchableOpacity style={styles.noteDelete} >
+        <Text style={styles.noteDeleteText} onPress={() => {onDelete(id)}}>X</Text>
       </TouchableOpacity>
     </View>
   );
@@ -48,7 +50,7 @@ const styles = {
     right: 10,
   },
   noteDeleteText: {
-    colro: 'white',
+    color: 'white',
     fontWeight: '700',
     fontSize: 24,
   }

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import Note from './Notes'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native'
 import { db } from './webConfig';
-import { collection, getDocs, addDoc, deleteDoc, doc, Firestore } from 'firebase/firestore';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 const Main = () => {
 
@@ -17,25 +17,18 @@ const Main = () => {
       setNotes(data.docs.map((doc) => ({...doc.data(), id: doc.id })));
     }
     getNotes()
+    
   }, [notes])
 
   const addTodo = async () => {
-    // let id = 1;
     await addDoc(notesCollectionRef, { todo: inputVal });
-    // increaseID(id);
+    setInputVal('')
   }
 
-  // const increaseID = (id) => {
-  //   return id++;
-  // }
-
-
-
   return(
-
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Your Todos  </Text>
+        <Text style={styles.headerText}>Your Todos</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
         {notes.map((item, i) => (
